@@ -1,0 +1,30 @@
+group 'com.github.Mindera'
+version '1.0.7'
+
+apply plugin: 'java'
+apply plugin: 'application'
+sourceCompatibility = 1.5
+
+apply plugin: 'com.mindera.gradle.slack'
+mainClassName = 'Main'
+
+buildscript {
+    repositories {
+        // local
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'com.github.Mindera:gradle-slack-plugin:1.0.7'
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+slack {
+    url ''
+    dependsOnTasks 'task'
+    title 'my app name'
+}
