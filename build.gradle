@@ -6,6 +6,7 @@ dependencies {
 }
 
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 repositories {
@@ -29,6 +30,11 @@ task sourcesJar(type: Jar) {
 
 artifacts {
     archives javadocJar, sourcesJar
+}
+
+dependencies {
+// http://mvnrepository.com/artifact/com.google.code.gson/gson
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
 }
 
 // TODO signing the jar
@@ -68,6 +74,41 @@ uploadArchives {
                         id 'joaoprudencio'
                         name 'Joao Prudencio'
                         email 'joao.prudencio@mindera.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            groupId rootProject.group
+            artifactId rootProject.name
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = DELEGATE_FIRST
+                    name 'gradle-slack-plugin'
+                    packaging 'jar'
+                    description 'Gradle plugin to send messages to Slack after each build '
+                    url 'https://github.com/Mindera/gradle-slack-plugin'
+
+                    scm {
+                        connection 'scm:git@github.com:Mindera/gradle-slack-plugin.git'
+                        developerConnection 'scm:git@github.com:Mindera/gradle-slack-plugin.git'
+                        url 'https://github.com/Mindera/gradle-slack-plugin'
+                    }
+                    developers {
+                        developer {
+                            id 'joaoprudencio'
+                            name 'Joao Prudencio'
+                            email 'joao.prudencio@mindera.com'
+                        }
                     }
                 }
             }
