@@ -30,34 +30,37 @@ class SlackPlugin implements Plugin<Project> {
     }
 
     void monitorTasksLifecyle(Project project) {
-
-
         project.getGradle().getTaskGraph().addTaskExecutionListener(new TaskExecutionListener() {
+
             @Override
-            void beforeExecute(Task task) {
+            void beforeExecute(final Task task) {
+                if(!shouldMonitorTask(task)){
+                    return;
+                }
                 task.logging.addStandardOutputListener(new StandardOutputListener() {
                     @Override
                     void onOutput(CharSequence charSequence) {
-                        mTaskLogBuilder.append(charSequence)
+                        mTaskLogBuilder.append(charSequence);
                     }
                 })
             }
 
             @Override
             void afterExecute(Task task, TaskState state) {
-                handleTaskFinished(task, state)
+                handleTaskFinished(task, state, mTaskLogBuilder.toString())
+                mTaskLogBuilder.delete(0, mTaskLogBuilder.length())
             }
         })
     }
 
-    void handleTaskFinished(Task task, TaskState state) {
+    void handleTaskFinished(Task task, TaskState state, String outputMessage) {
         boolean shouldSendMessage = shouldMonitorTask(task);
 
         // only send a slack message if the task failed
         // or the task is registered to be monitored
         if (shouldSendMessage) {
             SlackMessage slackMessage = SlackMessageTransformer.buildSlackMessage(
-                    mExtension.title, task, state, mTaskLogBuilder.toString(), mExtension.gitInfo)
+                    mExtension.title, task, state, outputMessage, mExtension.gitInfo)
             SlackApi api = new SlackApi(mExtension.url)
             api.call(slackMessage)
         }
