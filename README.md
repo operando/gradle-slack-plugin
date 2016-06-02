@@ -1,4 +1,4 @@
-# gradle-slack-plugin
+# gradle-slack-plugin [![](https://jitpack.io/v/operando/gradle-slack-plugin.svg)](https://jitpack.io/#operando/gradle-slack-plugin)
 
 Gradle plugin to send Slack messages according to your build lifecycle. Useful to integrate with a CI server, to notify everyone that some gradle task has failed.
 
