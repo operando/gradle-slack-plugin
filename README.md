@@ -5,6 +5,10 @@ Gradle plugin to send Slack messages according to your build lifecycle. Useful t
 ![Build Passing](http://i.imgur.com/eIq9hp1.png)
 ![Build Failing](http://i.imgur.com/cgf5fHf.png)
 
+Disable git information Slack messages.
+
+![disable git info](./arts/disable_git_ingo_slack_notification.png)
+
 ## Usage
 
 The plugin is available in [JitPack](https://jitpack.io/). Just add the following to your buildscript dependencies:
@@ -64,7 +68,7 @@ slack {
 *	dependsOnTasks: let you specify a list of tasks that will trigger a message to slack, in case of error and success;
 *	title: the title of the slack message, can be the name of your app for instance;
 *	enabled: a boolean to define if the slack integration is active or not, useful to avoid sending messages on your local builds.
-*   gitInfo: a boolean to define if the git infomartion is send or not.
+*   gitInfo: a boolean to define if the git information is send or not.
 
 
 ## Credits
