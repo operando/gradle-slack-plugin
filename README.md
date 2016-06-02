@@ -57,12 +57,14 @@ slack {
     dependsOnTasks 'testDebug', 'publishApkRelease'
     title 'my app name'
     enabled = isCDMachine()
+    gitInfo true or false
 }
 ```
 
 *	dependsOnTasks: let you specify a list of tasks that will trigger a message to slack, in case of error and success;
 *	title: the title of the slack message, can be the name of your app for instance;
 *	enabled: a boolean to define if the slack integration is active or not, useful to avoid sending messages on your local builds.
+*   gitInfo: a boolean to define if the git infomartion is send or not.
 
 
 ## Credits
