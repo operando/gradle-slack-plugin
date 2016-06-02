@@ -15,16 +15,16 @@ import org.gradle.api.tasks.TaskState
  */
 class SlackPlugin implements Plugin<Project> {
 
-    SlackPluginExtension mExtension
-    StringBuilder mTaskLogBuilder
+    SlackPluginExtension extension
+    StringBuilder taskLogBuilder
 
     void apply(Project project) {
 
-        mTaskLogBuilder = new StringBuilder()
-        mExtension = project.extensions.create('slack', SlackPluginExtension)
+        taskLogBuilder = new StringBuilder()
+        extension = project.extensions.create('slack', SlackPluginExtension)
 
         project.afterEvaluate {
-            if (mExtension.url != null && mExtension.enabled)
+            if (extension.url != null && extension.enabled)
                 monitorTasksLifecyle(project)
         }
     }
@@ -40,15 +40,15 @@ class SlackPlugin implements Plugin<Project> {
                 task.logging.addStandardOutputListener(new StandardOutputListener() {
                     @Override
                     void onOutput(CharSequence charSequence) {
-                        mTaskLogBuilder.append(charSequence);
+                        taskLogBuilder.append(charSequence);
                     }
                 })
             }
 
             @Override
             void afterExecute(Task task, TaskState state) {
-                handleTaskFinished(task, state, mTaskLogBuilder.toString())
-                mTaskLogBuilder.delete(0, mTaskLogBuilder.length())
+                handleTaskFinished(task, state, taskLogBuilder.toString())
+                taskLogBuilder.delete(0, taskLogBuilder.length())
             }
         })
     }
@@ -60,14 +60,14 @@ class SlackPlugin implements Plugin<Project> {
         // or the task is registered to be monitored
         if (shouldSendMessage) {
             SlackMessage slackMessage = SlackMessageTransformer.buildSlackMessage(
-                    mExtension.title, task, state, outputMessage, mExtension.gitInfo)
-            SlackApi api = new SlackApi(mExtension.url)
+                    extension.title, task, state, outputMessage, extension.gitInfo)
+            SlackApi api = new SlackApi(extension.url)
             api.call(slackMessage)
         }
     }
 
     boolean shouldMonitorTask(Task task) {
-        for (dependentTask in mExtension.dependsOnTasks) {
+        for (dependentTask in extension.dependsOnTasks) {
             if (task.getName().equals(dependentTask)) {
                 return true
             }
