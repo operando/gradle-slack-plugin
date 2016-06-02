@@ -24,7 +24,7 @@ dependencies {
 }
 
 slack {
-    url 'https://hooks.slack.com/services/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'
+    url ''
     dependsOnTasks 'help'
     title 'my app name'
     gitInfo false
