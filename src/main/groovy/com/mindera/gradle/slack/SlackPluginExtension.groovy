@@ -6,6 +6,7 @@ class SlackPluginExtension {
     String url
     List<Object> dependsOnTasks
     String title
+    boolean gitInfo = true
     boolean enabled = true
 
     void dependsOnTasks(Object... paths) {

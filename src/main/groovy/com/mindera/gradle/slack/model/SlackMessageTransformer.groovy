@@ -22,7 +22,7 @@ class SlackMessageTransformer {
     private static final String AUTHOR_TITLE = 'Git Author'
     private static final String COMMIT_TITLE = 'Git Commit'
 
-    static SlackMessage buildSlackMessage(String title, Task task, TaskState state, String taskLog) {
+    static SlackMessage buildSlackMessage(String title, Task task, TaskState state, String taskLog, boolean isSendGitInfo) {
         Throwable failure = state.getFailure()
         boolean success = failure == null
 
@@ -56,23 +56,25 @@ class SlackMessageTransformer {
         resultField.setShorten(true)
         attachments.addFields(resultField)
 
-        SlackField branchField = new SlackField()
-        branchField.setTitle(BRANCH_TITLE)
-        branchField.setValue(GitUtils.branchName())
-        branchField.setShorten(true)
-        attachments.addFields(branchField)
+        if(isSendGitInfo) {
+            SlackField branchField = new SlackField()
+            branchField.setTitle(BRANCH_TITLE)
+            branchField.setValue(GitUtils.branchName())
+            branchField.setShorten(true)
+            attachments.addFields(branchField)
 
-        SlackField authorField = new SlackField()
-        authorField.setTitle(AUTHOR_TITLE)
-        authorField.setValue(GitUtils.lastCommitAuthor())
-        authorField.setShorten(true)
-        attachments.addFields(authorField)
+            SlackField authorField = new SlackField()
+            authorField.setTitle(AUTHOR_TITLE)
+            authorField.setValue(GitUtils.lastCommitAuthor())
+            authorField.setShorten(true)
+            attachments.addFields(authorField)
 
-        SlackField commitField = new SlackField()
-        commitField.setTitle(COMMIT_TITLE)
-        commitField.setValue(GitUtils.lastCommitMessage())
-        commitField.setShorten(true)
-        attachments.addFields(commitField)
+            SlackField commitField = new SlackField()
+            commitField.setTitle(COMMIT_TITLE)
+            commitField.setValue(GitUtils.lastCommitMessage())
+            commitField.setShorten(true)
+            attachments.addFields(commitField)
+        }
 
         slackMessage.addAttachments(attachments)
 
