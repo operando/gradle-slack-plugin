@@ -25,7 +25,7 @@ buildscript {
     
     dependencies {
     	...
-        classpath 'com.github.operando:gradle-slack-plugin:1.1.0'
+        classpath 'com.github.operando:gradle-slack-plugin:1.2.0'
     }
 }
 ```
