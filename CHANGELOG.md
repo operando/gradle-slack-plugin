@@ -1,6 +1,11 @@
 
 # operando customize gradle-slack-plugin
 
+## ver 1.2.0 (2017/05/24)
+
+* Update gradle version 3.5
+* Update gson 2.8.0
+
 ## ver 1.1.0 (2016/06/03)
 
 * Add `gitInfo` field
